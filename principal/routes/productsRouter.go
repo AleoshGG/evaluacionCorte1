@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"evaluacionCorte1/principal/controllers"
+	cP "evaluacionCorte1/principal/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,9 +10,9 @@ func RegisterRoutes(r *gin.Engine) {
 
 	productsRouter := r.Group("/products") 
 	{
-		productsRouter.POST("/", controllers.CreateProduct)
-		productsRouter.GET("/", controllers.GetProduct)
-		productsRouter.PUT("/:id", controllers.UpdateProduct)
-		productsRouter.DELETE("/:id", controllers.DeleteProduct)
+		productsRouter.POST("/", cP.CreateProduct)
+		productsRouter.GET("/", cP.GetProduct)
+		productsRouter.PUT("/:id", cP.UpdateProduct)
+		productsRouter.DELETE("/:id", cP.DeleteProduct)
 	}
 }
