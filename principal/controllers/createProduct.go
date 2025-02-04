@@ -4,18 +4,14 @@ import (
 	"evaluacionCorte1/principal/db"
 	"evaluacionCorte1/principal/models"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func CreateProduct(c *gin.Context) {
-	var newProduct models.Product
-
-	id := c.Param("id")
-	id_product, _ := strconv.ParseInt(id, 10, 64)
+	var product models.Product
 	
-	if err := c.ShouldBindJSON(&newProduct); err != nil {
+	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": false,
 			"error": "Datos inválidos: " + err.Error(),
@@ -23,16 +19,13 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	for _, product := range db.Products {
-    	if product.Id == int(id_product) {
-        	product.Name = newProduct.Name
-			product.CodeB = newProduct.CodeB
-			product.Amount = newProduct.Amount
-    	}
-	}
+	newProduct := models.NewProduct(product.Name, product.Amount, product.CodeB)
 
-	c.JSON(http.StatusOK, gin.H{
+	db.Products = append(db.Products, *newProduct)
+
+	c.JSON(http.StatusCreated, gin.H{
 		"status": true,
 		"Producto": newProduct,
 	})
+
 }
