@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"evaluacionCorte1/replication/models"
+	"evaluacionCorte1/replication/db"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,25 +19,25 @@ func Check(c *gin.Context) {
 		fmt.Println("Error al hacer la petición:", err)
 		return
 	}
-	defer response.Body.Close()
-
+	
 	body, err := io.ReadAll(response.Body)
 
-	// Deserializar el JSON en un array de Product
-	var products []models.Product
-	err = json.Unmarshal(body, &products)
+	if err != nil {
+		fmt.Println("Error al leer el cuerpo de la respuesta:", err)
+		return
+	}
+
+	// Deserializar el JSON en la estructura Response
+	var res db.Response
+	err = json.Unmarshal(body, &res)
 	if err != nil {
 		fmt.Println("Error al parsear JSON:", err)
 		return
 	}
 
-	// Mostrar los productos obtenidos
-	fmt.Println("Productos obtenidos:")
-	for _, product := range products {
-		fmt.Printf("ID: %d, Nombre: %s, Cantidad: %d, Código: %s\n",
-			product.Id, product.Name, product.Amount, product.CodeB)
-	}
+	fmt.Println("Productos:", res.Producto)
 
+	response.Body.Close()
 	time.Sleep(5 * time.Second)
 		
 	}
