@@ -13,15 +13,9 @@ import (
 
 func Check(c *gin.Context) {
 	for  {
-		response, err := http.Get("http://localhost:8080/products/")
+	response, _ := http.Get("http://localhost:8080/products/")
 
-	if err != nil {
-		fmt.Println("Error al hacer la petición:", err)
-		return
-	}
-	
 	body, err := io.ReadAll(response.Body)
-
 	if err != nil {
 		fmt.Println("Error al leer el cuerpo de la respuesta:", err)
 		return
